@@ -2,22 +2,31 @@ const express = require('express');
 const { Sequelize, DataTypes } = require('sequelize');
 const cors = require('cors');
 require('dotenv').config();
-app.use(cors({ origin: '*' }));
-const app = express();
-const PORT = process.env.PORT || 5000; // Menggunakan port 5000 agar tidak bentrok dengan frontend
 
+// Inisialisasi Express APP harus paling atas sebelum digunakan
+const app = express();
+
+// Konfigurasi PORT (Hanya ditulis satu kali di sini)
+const PORT = process.env.PORT || 5000; 
+
+// =========================================================================
 // 1. Middleware
-app.use(cors());
+// =========================================================================
+app.use(cors({ origin: '*' })); // Mengizinkan semua akses CORS untuk pengujian frontend
 app.use(express.json());
 
+// =========================================================================
 // 2. Konfigurasi Koneksi Database MariaDB/MySQL
+// =========================================================================
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
   host: process.env.DB_HOST,
   dialect: 'mysql',
   logging: false,
 });
 
-// 3. Definisi Model/Tabel Vendors (Sesuai dengan data Wedding Organizer Anda)
+// =========================================================================
+// 3. Definisi Model/Tabel Vendors
+// =========================================================================
 const Vendor = sequelize.define('Vendor', {
   id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
   nama_vendor: { type: DataTypes.STRING, allowNull: false },
@@ -93,7 +102,6 @@ app.get('/schema', (req, res) => {
 app.get('/vendors', async (req, res) => {
   try {
     const data = await Vendor.findAll();
-    // Mengembalikan langsung array data agar langsung terbaca di tabel aplikasi penguji
     res.json(data);
   } catch (error) {
     res.status(500).json({ status: "error", message: error.message });
@@ -160,8 +168,6 @@ app.get("/", (req, res) => {
 });
 
 // Menjalankan Server
-const PORT = process.env.PORT || 5000;
-
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server berhasil berjalan di port ${PORT}`);
 });
