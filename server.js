@@ -2,7 +2,7 @@ const express = require('express');
 const { Sequelize, DataTypes } = require('sequelize');
 const cors = require('cors');
 require('dotenv').config();
-
+app.use(cors({ origin: '*' }));
 const app = express();
 const PORT = process.env.PORT || 5000; // Menggunakan port 5000 agar tidak bentrok dengan frontend
 
