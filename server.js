@@ -160,6 +160,8 @@ app.get("/", (req, res) => {
 });
 
 // Menjalankan Server
-app.listen(PORT, () => {
-  console.log(`Server backend berjalan di http://localhost:${PORT}`);
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server berhasil berjalan di port ${PORT}`);
 });
